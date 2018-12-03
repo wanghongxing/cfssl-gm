@@ -19,6 +19,7 @@ import (
 	cferr "github.com/cloudflare/cfssl/errors"
 	"github.com/cloudflare/cfssl/helpers"
 	"github.com/cloudflare/cfssl/log"
+	"crypto/sm2"
 )
 
 const (
@@ -92,6 +93,15 @@ func (kr *BasicKeyRequest) Generate() (crypto.PrivateKey, error) {
 			return nil, errors.New("invalid curve")
 		}
 		return ecdsa.GenerateKey(curve, rand.Reader)
+	case "ecdsa-sm2": //\\JS What's the fuck
+		var curve elliptic.Curve //\\JS What's the fuck
+		switch kr.Size() { //\\JS What's the fuck
+		case curveP256: //\\JS What's the fuck
+			curve = sm2.Sm2P256() //\\JS What's the fuck
+		default: //\\JS What's the fuck
+			return nil, errors.New("invalid curve") //\\JS What's the fuck
+		} //\\JS What's the fuck
+		return ecdsa.GenerateKey(curve, rand.Reader) //\\JS What's the fuck
 	default:
 		return nil, errors.New("invalid algorithm")
 	}
@@ -123,6 +133,13 @@ func (kr *BasicKeyRequest) SigAlgo() x509.SignatureAlgorithm {
 		default:
 			return x509.ECDSAWithSHA1
 		}
+	case "ecdsa-sm2": //\\JS What's the fuck
+		switch kr.Size() { //\\JS What's the fuck
+		case curveP256: //\\JS What's the fuck
+			return x509.SM2WithSM3 //\\JS What's the fuck
+		default: //\\JS What's the fuck
+			return x509.ECDSAWithSHA1 //\\JS What's the fuck
+		} //\\JS What's the fuck
 	default:
 		return x509.UnknownSignatureAlgorithm
 	}

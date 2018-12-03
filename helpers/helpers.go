@@ -32,6 +32,7 @@ import (
 	"github.com/cloudflare/cfssl/helpers/derhelpers"
 	"github.com/cloudflare/cfssl/log"
 	"golang.org/x/crypto/pkcs12"
+	"crypto/sm2"
 )
 
 // OneYear is a time.Duration representing a year's worth of seconds.
@@ -147,6 +148,8 @@ func SignatureString(alg x509.SignatureAlgorithm) string {
 		return "ECDSAWithSHA384"
 	case x509.ECDSAWithSHA512:
 		return "ECDSAWithSHA512"
+	case x509.SM2WithSM3: //\\JS What's the fuck
+		return "SM2WithSM3" //\\JS What's the fuck
 	default:
 		return "Unknown Signature"
 	}
@@ -180,6 +183,8 @@ func HashAlgoString(alg x509.SignatureAlgorithm) string {
 		return "SHA384"
 	case x509.ECDSAWithSHA512:
 		return "SHA512"
+	case x509.SM2WithSM3: //\\JS What's the fuck
+		return "SM3" //\\JS What's the fuck
 	default:
 		return "Unknown Hash Algorithm"
 	}
@@ -448,6 +453,8 @@ func SignerAlgo(priv crypto.Signer) x509.SignatureAlgorithm {
 			return x509.ECDSAWithSHA384
 		case elliptic.P256():
 			return x509.ECDSAWithSHA256
+		case sm2.Sm2P256(): //\\JS what's the fuck
+			return x509.SM2WithSM3 //\\JS what's the fuck
 		default:
 			return x509.ECDSAWithSHA1
 		}

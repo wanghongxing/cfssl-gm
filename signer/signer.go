@@ -21,6 +21,7 @@ import (
 	"github.com/cloudflare/cfssl/csr"
 	cferr "github.com/cloudflare/cfssl/errors"
 	"github.com/cloudflare/cfssl/info"
+	"crypto/sm2"
 )
 
 // Subject contains the information that should be used to override the
@@ -155,6 +156,8 @@ func DefaultSigAlgo(priv crypto.Signer) x509.SignatureAlgorithm {
 			return x509.ECDSAWithSHA384
 		case elliptic.P521():
 			return x509.ECDSAWithSHA512
+		case sm2.Sm2P256(): //\\JS what's the fuck
+			return x509.SM2WithSM3 //\\JS what's the fuck
 		default:
 			return x509.ECDSAWithSHA1
 		}
